@@ -39,6 +39,27 @@ class Bd {
         localStorage.setItem(id, JSON.stringify(d))
         localStorage.setItem('id', id)
     }
+
+    recuperarTodosOsRegistros(){
+        let despesas = Array()
+
+         let id = localStorage.getItem('id')
+        //Recuperar todas as despesas cadastrada
+         for(let i=1; i <= id; i++) {
+            //Recuperar a despesa
+
+            let despesa = JSON.parse(localStorage.getItem(i))
+
+            if (despesa == null){
+                continue
+            } else {
+               despesas.push(despesa)
+            }
+
+         }
+
+        return despesas
+    }
 }
 
 
@@ -58,25 +79,39 @@ function cadastrarDespesas(){
     )
 
 
-
+    
 
      if (despesa.validarDados()){
         db.gravar(despesa)
         document.getElementById('modal_titulo').innerHTML = 'Registro inserido'
         document.getElementById('texto_modal').className = 'modal-header text-success'
         document.getElementById('modal_conteudo').innerHTML = 'Depesa foi cadastrada com sucesso!'
+        document.getElementById('campo_btn_validacao').innerHTML = 'Fechar'
+        document.getElementById('campo_btn_validacao').className = 'btn btn-success'
         $('#registrarDespesa').modal('show')
 
        
-    } else{
+    }
+    else{
         //Dialogo de error
         document.getElementById('modal_titulo').innerHTML = 'Campo inválido'
         document.getElementById('texto_modal').className = 'modal-header text-danger'
         document.getElementById('modal_conteudo').innerHTML = 'Todos os campos deve estar corretamente preenchidos!'
+        document.getElementById('campo_btn_validacao').innerHTML = 'Voltar e preencher'
+        document.getElementById('campo_btn_validacao').className = 'btn btn-danger'
         $('#registrarDespesa').modal('show')
         
     }
 }
+
+function carregaListaDespesa(){
+
+    let despesas = Array()
+    despesas = db.recuperarTodosOsRegistros()
+    console.log(despesas)
+}
+
+
 
 
 
