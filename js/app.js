@@ -62,7 +62,45 @@ class Bd {
     }
 
     pesquisar(despesa){
-        console.log(despesa)
+       let despesasFiltradas = Array() 
+       despesasFiltradas = this.recuperarTodosOsRegistros()
+       console.log(despesa)
+        console.log(despesasFiltradas)
+        
+
+        if (despesa.ano != ''){
+            console.log('Filtro de ano')
+            despesasFiltradas = despesasFiltradas.filter(d => d.ano == despesa.ano)
+        }
+
+        if (despesa.mes != ''){
+            console.log('Filtro de mes')
+            despesasFiltradas = despesasFiltradas.filter(d => d.mes == despesa.mes)
+        }
+
+        if (despesa.dia != ''){
+            console.log('Filtro de dia')
+            despesasFiltradas = despesasFiltradas.filter(d => d.dia == despesa.dia)
+        }
+
+        if (despesa.tipo != ''){
+            console.log('Filtro de detipo')
+            despesasFiltradas = despesasFiltradas.filter(d => d.tipo == despesa.tipo)
+        }
+
+        if (despesa.descricao != ''){
+            console.log('Filtro de descrição')
+            despesasFiltradas = despesasFiltradas.filter(d => d.descricao == despesa.descricao)
+        }
+
+        if (despesa.valor != ''){
+            console.log('Filtro de valor')
+            despesasFiltradas = despesasFiltradas.filter(d => d.valor == despesa.valor)
+        }
+
+        return despesasFiltradas
+        
+        
     }
 }
 
@@ -171,9 +209,54 @@ function pesquisarValor(){
     let valor = document.getElementById('valor').value
 
     let despesa = new Despesa(ano, mes, dia, descricao, valor)
+    let despesas =  db.pesquisar(despesa)
+   
 
-    db.pesquisar(despesa)
 
+    //Selecionando o elemento Tbody
+    let listaDespesas = document.getElementById('listaDespesas')
+
+    listaDespesas.innerHTML = ''
+
+   /* <tr>
+                <td>15/03/2018</td>
+                <td>Alimentação</td>
+                <td>Compras do mês</td>
+                <td>444.9</td>
+              </tr>
+*/
+
+    //Percorrer o Array despesa, listando cada despesa de forma dinâmica
+
+    despesas.forEach(function(d) {
+        //Criando lista
+
+
+
+        let linha = listaDespesas.insertRow()
+
+        //Inserindo os valores (td)
+
+        linha.insertCell(0).innerHTML = `${d.dia} / ${d.mes} / ${d.ano}`
+        
+
+        switch(parseInt(d.tipo)){
+            case 1: d.tipo = 'Alimentação'
+                break
+            case 2: d.tipo = 'Educação'
+                break
+            case 3: d.tipo = 'Lazer'
+                break
+            case 4: d.tipo = 'Saúde'
+                break
+            case 5: d.tipo = 'Transporte'
+                break
+        }
+
+        linha.insertCell(1).innerHTML = `${d.tipo}`
+        linha.insertCell(2).innerHTML = `${d.descricao}`
+        linha.insertCell(3).innerHTML = `${d.valor}`
+    })
 
 }
 
